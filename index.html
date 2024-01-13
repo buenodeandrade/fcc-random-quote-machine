@@ -1,0 +1,26 @@
+<body>
+    <div id="quote-box">
+        <p id="text"></p>
+        <p id="author"></p>
+        <button id="new-quote">New Quote</button>
+        <a id="tweet-quote" href="#" target="_blank">Tweet Quote</a>
+    </div>
+    <script>
+        const getRandomQuote = async () => {
+            const response = await fetch('https://type.fit/api/quotes');
+            const data = await response.json();
+            const randomIndex = Math.floor(Math.random() * data.length);
+            return data[randomIndex];
+        };
+        const displayQuote = async () => {
+            const quoteData = await getRandomQuote();
+            document.getElementById('text').innerText = quoteData.text;
+            document.getElementById('author').innerText = quoteData.author ? quoteData.author : 'Unknown';
+            const tweetQuoteUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(quoteData.text + ' - ' + quoteData.author)}`;
+            document.getElementById('tweet-quote').href = tweetQuoteUrl;
+        };
+
+        document.getElementById('new-quote').addEventListener('click', displayQuote);
+        displayQuote();
+    </script>
+</body>
